@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-@RequestMapping("/auth")
 public class UserService {
 
 
@@ -21,8 +20,8 @@ public class UserService {
 
 
 
-    @PostMapping("/login")
-    public User login(@RequestBody User user){
+
+    public User login(User user){
        User expectedUser = userRepository.getUserByName(user.getUsername());
        if(expectedUser == null){
            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
@@ -36,8 +35,8 @@ public class UserService {
     }
 
 
-    @PostMapping("/register")
-    public User register(@RequestBody User user){
+
+    public User register(User user){
         User expectedUser = userRepository.getUserByName(user.getUsername());
         if(expectedUser != null){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username already exists");
