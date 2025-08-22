@@ -2,8 +2,11 @@ package com.example.login.Models;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+import java.util.HashSet;
+
 @Entity
-@Table(name = "User")
+@Table(name = "Users")
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,7 +16,12 @@ public class User{
     private String username;
 
     @Column (nullable = false)
-    private String password;
+    private String passwordHash;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name="user_roles", joinColumns=@JoinColumn(name="user_id"))
+    @Column(name="role")                  // p.ej. "ROLE_USER", "ROLE_ADMIN"
+    private Set<String> roles = new HashSet<>();
 
 
     public Long getId() {
@@ -32,11 +40,17 @@ public class User{
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String password) {
+        this.passwordHash = password;
     }
+
+    public Set<String> getRoles() { return roles; }
+
+    public void setRoles(Set<String> roles) { this.roles = roles; }
+
+
 }

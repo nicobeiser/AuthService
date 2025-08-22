@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -22,23 +24,20 @@ public class UserService {
 
 
     public User login(User user){
-       User expectedUser = userRepository.getUserByName(user.getUsername());
-       if(expectedUser == null){
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-       } else{
-           if (expectedUser.getPassword().equals(user.getPassword())){
-               return expectedUser;
-           } else{
-               throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong Password");
-           }
-       }
+        User expectedUser = userRepository.findByUsername(user.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        if (expectedUser.getPasswordHash().equals(user.getPasswordHash())){
+            return expectedUser;
+        } else{
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong Password");
+        }
+
     }
 
 
 
     public User register(User user){
-        User expectedUser = userRepository.getUserByName(user.getUsername());
-        if(expectedUser != null){
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username already exists");
         }
         return userRepository.save(user);
