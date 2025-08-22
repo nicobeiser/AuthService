@@ -30,7 +30,7 @@ public class UserService {
     public User login(User user){
         User expectedUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-        if (expectedUser.getPassword().equals(user.getPassword())){
+        if (passwordEncoder.matches(user.getPassword(), expectedUser.getPassword())) {
             return expectedUser;
         } else{
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong Password");
