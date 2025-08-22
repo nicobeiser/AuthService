@@ -23,7 +23,7 @@ public class MyUserDetailsService implements UserDetailsService {
         // mapeá tu entidad a UserDetails:
         return org.springframework.security.core.userdetails.User
                 .withUsername(u.getUsername())
-                .password(u.getPasswordHash())   // IMPORTANTE: hash (BCrypt)
+                .password(u.getPassword())
                 .authorities(u.getRoles().toArray(String[]::new))
                 .accountLocked(false)
                 .disabled(false)

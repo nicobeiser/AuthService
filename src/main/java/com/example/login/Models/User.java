@@ -16,7 +16,7 @@ public class User{
     private String username;
 
     @Column (nullable = false)
-    private String passwordHash;
+    private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name="user_roles", joinColumns=@JoinColumn(name="user_id"))
@@ -40,12 +40,12 @@ public class User{
         this.username = username;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String password) {
-        this.passwordHash = password;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<String> getRoles() { return roles; }
